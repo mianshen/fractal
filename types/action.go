@@ -38,22 +38,31 @@ const (
 	Transfer ActionType = iota
 	// CreateContract repesents the create contract action.
 	CreateContract
-	// CreateAccount repesents the create account.
+	// CreateAccount repesents the create account action.
 	CreateAccount
+	// UpdateAccount repesents the update account action.
 	UpdateAccount
+	// DeleteAccount repesents the delete account action.
 	DeleteAccount
-	// Asset operation
+	// IncreaseAsset repesents increase asset action.
 	IncreaseAsset
+	// IssueAsset repesents Issue asset action.
 	IssueAsset
+	// SetAssetOwner repesents set asset new owner action.
 	SetAssetOwner
-	// dpos
-	Miner
+	// RegProducer repesents register producer action.
 	RegProducer
+	// UpdateProducer repesents update producer action.
 	UpdateProducer
+	// UnregProducer repesents unregister producer action.
 	UnregProducer
+	// RemoveVoter repesents producer remove voter action.
 	RemoveVoter
+	// VoteProducer repesents voter vote producer action.
 	VoteProducer
+	// ChangeProducer repesents voter change producer action.
 	ChangeProducer
+	// UnvoteProducer repesents voter cancel vote some producer action.
 	UnvoteProducer
 )
 
@@ -105,14 +114,29 @@ func NewAction(actionType ActionType, from, to common.Name, nonce, assetID, gasL
 	return &Action{data: data}
 }
 
-func (a *Action) Type() ActionType       { return a.data.AType }
-func (a *Action) Nonce() uint64          { return a.data.Nonce }
-func (a *Action) AssetID() uint64        { return a.data.AssetID }
-func (a *Action) Sender() common.Name    { return a.data.From }
+// Type returns action's type.
+func (a *Action) Type() ActionType { return a.data.AType }
+
+// Nonce returns action's nonce.
+func (a *Action) Nonce() uint64 { return a.data.Nonce }
+
+// AssetID returns action's assetID.
+func (a *Action) AssetID() uint64 { return a.data.AssetID }
+
+// Sender returns action's Sender.
+func (a *Action) Sender() common.Name { return a.data.From }
+
+// Recipient returns action's Recipient.
 func (a *Action) Recipient() common.Name { return a.data.To }
-func (a *Action) Data() []byte           { return common.CopyBytes(a.data.Payload) }
-func (a *Action) Gas() uint64            { return a.data.GasLimit }
-func (a *Action) Value() *big.Int        { return new(big.Int).Set(a.data.Amount) }
+
+// Data returns action's Data.
+func (a *Action) Data() []byte { return common.CopyBytes(a.data.Payload) }
+
+// Gas returns action's Gas.
+func (a *Action) Gas() uint64 { return a.data.GasLimit }
+
+// Value returns action's Value.
+func (a *Action) Value() *big.Int { return new(big.Int).Set(a.data.Amount) }
 
 // EncodeRLP implements rlp.Encoder
 func (a *Action) EncodeRLP(w io.Writer) error {

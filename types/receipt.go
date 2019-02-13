@@ -38,16 +38,6 @@ type ActionResult struct {
 	Error   string
 }
 
-// EncodeRLP implements rlp.Encoder
-func (a *ActionResult) EncodeRLP() ([]byte, error) {
-	return rlp.EncodeToBytes(a)
-}
-
-// DecodeRLP implements rlp.Decoder
-func (a *ActionResult) DecodeRLP(data []byte) error {
-	return rlp.DecodeBytes(data, a)
-}
-
 // RPCActionResult that will serialize to the RPC representation of a ActionResult.
 type RPCActionResult struct {
 	ActionType uint64 `json:"actionType"`
@@ -84,19 +74,9 @@ func NewReceipt(root []byte, cumulativeGasUsed, totalGasUsed uint64) *Receipt {
 	return &Receipt{PostState: common.CopyBytes(root), CumulativeGasUsed: cumulativeGasUsed, TotalGasUsed: totalGasUsed}
 }
 
-// EncodeRLP implements rlp.Encoder
-func (r *Receipt) EncodeRLP() ([]byte, error) {
-	return rlp.EncodeToBytes(r)
-}
-
-// DecodeRLP implements rlp.Decoder
-func (r *Receipt) DecodeRLP(data []byte) error {
-	return rlp.DecodeBytes(data, r)
-}
-
 // Size returns the approximate memory used by all internal contents
 func (r *Receipt) Size() common.StorageSize {
-	bytes, _ := r.EncodeRLP()
+	bytes, _ := rlp.EncodeToBytes(r)
 	return common.StorageSize(len(bytes))
 }
 
